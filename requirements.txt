@@ -1,0 +1,7 @@
+numpy
+scipy
+torch>=2.4
+trimesh
+matplotlib
+imageio-ffmpeg
+ardy @ git+https://github.com/nv-tlabs/ardy.git

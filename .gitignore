@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+results/
+rest_fit.npz
+*.npz
+!assets/*.npz
