@@ -1,0 +1,972 @@
+{
+  "scope": "65 TRAIN frames: four 16-frame clips plus one AIST++ difficult frame; not full-dataset quality acceptance.",
+  "units": "mm",
+  "metric": "Fixed body query vertices to full opposite surface, both directions pooled; no alignment or postprocessing.",
+  "body_regions": "Diagnostic head separation by dominant skinning owner. Original scores unchanged; hands already excluded. Neck retained.",
+  "query_counts": {
+    "smplx": {
+      "all": 7903,
+      "head": 3345,
+      "without_head": 4558
+    },
+    "soma": {
+      "all": 11674,
+      "head": 3943,
+      "without_head": 7731
+    }
+  },
+  "default_method": "verified_default",
+  "method_note": "verified_default renames legacy in the frozen comparison artifacts: this is the verified body solver, not the historical v0.1 full-body L-BFGS implementation.",
+  "official_revision": "366ed27cf88d88d9702c4f9f30cea046c0cc391c",
+  "cases": [
+    {
+      "dataset": "FineDance",
+      "source_id": "001",
+      "split": "TRAIN",
+      "source_start": 392,
+      "frames": 16,
+      "fps": 30,
+      "scored_array_sha256": "351382e445d3959da3cf95bcdd7a27f35eb0d8e45209b50179e586509b462a01",
+      "methods": {
+        "verified_default": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.820120296950959,
+              "p95": 11.695381945815203,
+              "max": 53.02693218137365
+            },
+            "forward_mm": {
+              "mean": 4.057783679624297,
+              "p95": 12.311390244865034,
+              "max": 30.92785166428857
+            },
+            "reverse_mm": {
+              "mean": 3.6592282536695304,
+              "p95": 11.207149347775863,
+              "max": 53.02693218137365
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.5508277538799136,
+                "p95": 8.111400422440102,
+                "max": 53.02693218137365
+              },
+              "worst": {
+                "distance_mm": 53.02693218137365,
+                "frame_offset": 15,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.572875122722118,
+                "p95": 12.592499186124943,
+                "max": 33.900806564558444
+              },
+              "worst": {
+                "distance_mm": 33.900806564558444,
+                "frame_offset": 2,
+                "vertex": 10532,
+                "owner": "Rshoulder",
+                "direction": "soma_to_smplx"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 6.367889881134033,
+            "p95": 17.42137651443481,
+            "max": 44.76597595214844
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.5354779362678528,
+            "p95": 2.08641766309738,
+            "max": 16.860214233398438
+          }
+        },
+        "official_default_projected": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 4.355637129477557,
+              "p95": 14.113477650232355,
+              "max": 53.73844841742233
+            },
+            "forward_mm": {
+              "mean": 4.651456161479597,
+              "p95": 14.808086861863181,
+              "max": 39.54082731800374
+            },
+            "reverse_mm": {
+              "mean": 4.155375196128911,
+              "p95": 13.548570371443457,
+              "max": 53.73844841742233
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.575284214901918,
+                "p95": 8.466217806075951,
+                "max": 53.73844841742233
+              },
+              "worst": {
+                "distance_mm": 53.73844841742233,
+                "frame_offset": 15,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 5.411476664136787,
+                "p95": 15.760795940319245,
+                "max": 39.54082731800374
+              },
+              "worst": {
+                "distance_mm": 39.54082731800374,
+                "frame_offset": 5,
+                "vertex": 6223,
+                "owner": "pelvis",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 11.305280685424805,
+            "p95": 31.71017112731929,
+            "max": 82.55767822265625
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 1.0454676151275635,
+            "p95": 5.442473387718197,
+            "max": 17.650938034057617
+          }
+        },
+        "official_map_exact_smplx": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.759882638711344,
+              "p95": 11.603454763738306,
+              "max": 53.48641810049877
+            },
+            "forward_mm": {
+              "mean": 3.906527206603463,
+              "p95": 12.137962015864703,
+              "max": 32.065728385090836
+            },
+            "reverse_mm": {
+              "mean": 3.6606080096166562,
+              "p95": 11.209882688028786,
+              "max": 53.48641810049877
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.4050266678191132,
+                "p95": 7.742400964334411,
+                "max": 53.48641810049877
+              },
+              "worst": {
+                "distance_mm": 53.48641810049877,
+                "frame_offset": 15,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.563380914882114,
+                "p95": 12.562638141389819,
+                "max": 32.065728385090836
+              },
+              "worst": {
+                "distance_mm": 32.065728385090836,
+                "frame_offset": 15,
+                "vertex": 6223,
+                "owner": "pelvis",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 8.952654838562012,
+            "p95": 27.187683582305905,
+            "max": 64.19843292236328
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.8901566863059998,
+            "p95": 4.573950743675232,
+            "max": 16.17086410522461
+          }
+        }
+      }
+    },
+    {
+      "dataset": "AIST++",
+      "source_id": "gBR_sBM_cAll_d04_mBR1_ch04",
+      "split": "TRAIN",
+      "source_start": 60,
+      "frames": 16,
+      "fps": 30,
+      "scored_array_sha256": "59a078c9f8886cedc139f1b0ec800921d00ddcf333c9a69c6c70335a2b883d85",
+      "methods": {
+        "verified_default": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.214135720105925,
+              "p95": 10.480910351270516,
+              "max": 55.48118702212858
+            },
+            "forward_mm": {
+              "mean": 3.4595258797184876,
+              "p95": 11.199439473515321,
+              "max": 35.09803726926218
+            },
+            "reverse_mm": {
+              "mean": 3.04801284607662,
+              "p95": 9.919603262005628,
+              "max": 55.48118702212858
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.0403137242952454,
+                "p95": 6.994178566234296,
+                "max": 55.48118702212858
+              },
+              "worst": {
+                "distance_mm": 55.48118702212858,
+                "frame_offset": 13,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 3.9102716714012464,
+                "p95": 11.874118829966003,
+                "max": 35.09803726926218
+              },
+              "worst": {
+                "distance_mm": 35.09803726926218,
+                "frame_offset": 15,
+                "vertex": 6272,
+                "owner": "pelvis",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 4.521392822265625,
+            "p95": 15.59473819732666,
+            "max": 46.49840545654297
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.8842858672142029,
+            "p95": 2.9751936078071592,
+            "max": 13.855964660644531
+          }
+        },
+        "official_default_projected": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.3950590244733423,
+              "p95": 10.411023324916657,
+              "max": 55.550790423872655
+            },
+            "forward_mm": {
+              "mean": 3.565561373703596,
+              "p95": 11.122326332613286,
+              "max": 40.15240501071831
+            },
+            "reverse_mm": {
+              "mean": 3.2796332864258257,
+              "p95": 9.792757929472964,
+              "max": 55.550790423872655
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.2708239179511382,
+                "p95": 7.3288247198597585,
+                "max": 55.550790423872655
+              },
+              "worst": {
+                "distance_mm": 55.550790423872655,
+                "frame_offset": 12,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.0617874365763456,
+                "p95": 11.508194314522262,
+                "max": 42.115031872118884
+              },
+              "worst": {
+                "distance_mm": 42.115031872118884,
+                "frame_offset": 15,
+                "vertex": 3744,
+                "owner": "pelvis",
+                "direction": "soma_to_smplx"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 8.33284854888916,
+            "p95": 21.02889699935913,
+            "max": 47.49170684814453
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 1.283469319343567,
+            "p95": 3.9225392937660213,
+            "max": 14.427563667297363
+          }
+        },
+        "official_map_exact_smplx": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.314222388669944,
+              "p95": 10.724730099471262,
+              "max": 55.75796782666512
+            },
+            "forward_mm": {
+              "mean": 3.484231233557189,
+              "p95": 11.50431435835576,
+              "max": 30.686903679775767
+            },
+            "reverse_mm": {
+              "mean": 3.1991307404650513,
+              "p95": 10.089579370830212,
+              "max": 55.75796782666512
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.065589442442942,
+                "p95": 7.242781478867203,
+                "max": 55.75796782666512
+              },
+              "worst": {
+                "distance_mm": 55.75796782666512,
+                "frame_offset": 13,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.054725026158947,
+                "p95": 11.988774839948313,
+                "max": 30.686903679775767
+              },
+              "worst": {
+                "distance_mm": 30.686903679775767,
+                "frame_offset": 15,
+                "vertex": 5719,
+                "owner": "pelvis",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 8.237984657287598,
+            "p95": 23.213777923583983,
+            "max": 50.46417999267578
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 1.1206313371658325,
+            "p95": 3.613771486282348,
+            "max": 13.913542747497559
+          }
+        }
+      }
+    },
+    {
+      "dataset": "HumanML3D",
+      "source_id": "000002",
+      "split": "TRAIN",
+      "source_start": 60,
+      "frames": 16,
+      "fps": 30,
+      "scored_array_sha256": "eba02fee4c3e72b83bd3b312d109a514909bcf663d124c32ae472ac0e479b63b",
+      "methods": {
+        "verified_default": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 4.550961510270072,
+              "p95": 15.912123267544782,
+              "max": 52.74294456958594
+            },
+            "forward_mm": {
+              "mean": 4.950515566311518,
+              "p95": 17.071886698932325,
+              "max": 50.59195239604366
+            },
+            "reverse_mm": {
+              "mean": 4.280473613671169,
+              "p95": 14.755834887764252,
+              "max": 52.74294456958594
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.4485679933982,
+                "p95": 8.407421075626976,
+                "max": 52.74294456958594
+              },
+              "worst": {
+                "distance_mm": 52.74294456958594,
+                "frame_offset": 11,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 5.797787448178946,
+                "p95": 19.783323522967386,
+                "max": 50.59195239604366
+              },
+              "worst": {
+                "distance_mm": 50.59195239604366,
+                "frame_offset": 0,
+                "vertex": 7235,
+                "owner": "Rcollar",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 7.719778537750244,
+            "p95": 26.310759925842255,
+            "max": 54.76816177368164
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.02533002942800522,
+            "p95": 0.0795027509331703,
+            "max": 0.31465980410575867
+          }
+        },
+        "official_default_projected": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 4.380923212267472,
+              "p95": 16.001679303180154,
+              "max": 53.560566312736206
+            },
+            "forward_mm": {
+              "mean": 4.724709238751617,
+              "p95": 16.854260115754332,
+              "max": 46.58331164938478
+            },
+            "reverse_mm": {
+              "mean": 4.148188848098877,
+              "p95": 15.221553718041323,
+              "max": 53.560566312736206
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.632065602843016,
+                "p95": 8.446362929549073,
+                "max": 53.560566312736206
+              },
+              "worst": {
+                "distance_mm": 53.560566312736206,
+                "frame_offset": 0,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 5.418084434294117,
+                "p95": 19.65029393404986,
+                "max": 46.58331164938478
+              },
+              "worst": {
+                "distance_mm": 46.58331164938478,
+                "frame_offset": 0,
+                "vertex": 7178,
+                "owner": "Rcollar",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 12.262019157409668,
+            "p95": 38.41846523284912,
+            "max": 51.77315902709961
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.04298722371459007,
+            "p95": 0.14805991649627684,
+            "max": 0.42544636130332947
+          }
+        },
+        "official_map_exact_smplx": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 4.2536875515792865,
+              "p95": 15.200214101098991,
+              "max": 52.466884214819
+            },
+            "forward_mm": {
+              "mean": 4.529043379208391,
+              "p95": 15.917435841386009,
+              "max": 39.91718704005561
+            },
+            "reverse_mm": {
+              "mean": 4.067278685230751,
+              "p95": 14.601723335586293,
+              "max": 52.466884214819
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.5711130906605986,
+                "p95": 8.430273019362739,
+                "max": 52.466884214819
+              },
+              "worst": {
+                "distance_mm": 52.466884214819,
+                "frame_offset": 15,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 5.251539506268475,
+                "p95": 18.702180793108422,
+                "max": 43.86190335341781
+              },
+              "worst": {
+                "distance_mm": 43.86190335341781,
+                "frame_offset": 0,
+                "vertex": 6093,
+                "owner": "Lcollar",
+                "direction": "soma_to_smplx"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 10.978730201721191,
+            "p95": 34.186882591247546,
+            "max": 47.847530364990234
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.03430700674653053,
+            "p95": 0.12387773953378198,
+            "max": 0.4023989737033844
+          }
+        }
+      }
+    },
+    {
+      "dataset": "BEAT2",
+      "source_id": "10_kieks_0_88_88",
+      "split": "TRAIN",
+      "source_start": 60,
+      "frames": 16,
+      "fps": 30,
+      "scored_array_sha256": "c9d07380b3f5d5c6b529df5a1384e7e767eed5a05f7775e5311ae3a73b63af99",
+      "methods": {
+        "verified_default": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.4740781842336146,
+              "p95": 11.967806651794307,
+              "max": 54.58656587944517
+            },
+            "forward_mm": {
+              "mean": 3.8223332845123235,
+              "p95": 12.806077067526612,
+              "max": 29.425848809439678
+            },
+            "reverse_mm": {
+              "mean": 3.2383183711873036,
+              "p95": 11.139465548508346,
+              "max": 54.58656587944517
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.030091440462071,
+                "p95": 7.245518023113113,
+                "max": 54.58656587944517
+              },
+              "worst": {
+                "distance_mm": 54.58656587944517,
+                "frame_offset": 15,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.330435527272675,
+                "p95": 13.412650525505377,
+                "max": 29.425848809439678
+              },
+              "worst": {
+                "distance_mm": 29.425848809439678,
+                "frame_offset": 8,
+                "vertex": 7178,
+                "owner": "Rcollar",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 5.092280387878418,
+            "p95": 16.986323642730714,
+            "max": 34.56610870361328
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.06899809837341309,
+            "p95": 0.23367265090346334,
+            "max": 3.329780101776123
+          }
+        },
+        "official_default_projected": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.443065830518172,
+              "p95": 11.837084300231513,
+              "max": 56.089371225085024
+            },
+            "forward_mm": {
+              "mean": 3.735665488597045,
+              "p95": 12.519425999221307,
+              "max": 29.354162312588123
+            },
+            "reverse_mm": {
+              "mean": 3.2449833311351575,
+              "p95": 11.258650152548638,
+              "max": 56.089371225085024
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 1.9868841698970399,
+                "p95": 7.0832857967728895,
+                "max": 56.089371225085024
+              },
+              "worst": {
+                "distance_mm": 56.089371225085024,
+                "frame_offset": 1,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.306655377479423,
+                "p95": 13.528105550725243,
+                "max": 30.404541649996613
+              },
+              "worst": {
+                "distance_mm": 30.404541649996613,
+                "frame_offset": 8,
+                "vertex": 6093,
+                "owner": "Lcollar",
+                "direction": "soma_to_smplx"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 8.740697860717773,
+            "p95": 26.7076189994812,
+            "max": 46.814640045166016
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.0926290899515152,
+            "p95": 0.30108353793621057,
+            "max": 3.569885730743408
+          }
+        },
+        "official_map_exact_smplx": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.390552153812928,
+              "p95": 11.774718363383144,
+              "max": 54.6338041665406
+            },
+            "forward_mm": {
+              "mean": 3.6402927982699187,
+              "p95": 12.363628007385286,
+              "max": 25.87521710437521
+            },
+            "reverse_mm": {
+              "mean": 3.2214841125979548,
+              "p95": 11.21147660638501,
+              "max": 54.6338041665406
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.1013408621502614,
+                "p95": 7.392330508563099,
+                "max": 54.6338041665406
+              },
+              "worst": {
+                "distance_mm": 54.6338041665406,
+                "frame_offset": 15,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.155119807294701,
+                "p95": 13.049770976463643,
+                "max": 26.409732749938406
+              },
+              "worst": {
+                "distance_mm": 26.409732749938406,
+                "frame_offset": 8,
+                "vertex": 2259,
+                "owner": "Lcollar",
+                "direction": "soma_to_smplx"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 8.449039459228516,
+            "p95": 26.251930904388427,
+            "max": 44.55451202392578
+          },
+          "acceleration_error_original_attachment_mm_per_frame2": {
+            "mean": 0.0739380493760109,
+            "p95": 0.2530311346054077,
+            "max": 3.326270341873169
+          }
+        }
+      }
+    },
+    {
+      "dataset": "AIST++",
+      "source_id": "gBR_sBM_cAll_d04_mBR1_ch04",
+      "split": "TRAIN",
+      "source_start": 275,
+      "frames": 1,
+      "fps": 30,
+      "scored_array_sha256": "30a4691b0595203a88c00d1ce9eceffd3d0b1171f852dd1291f93ed81ec9b7f7",
+      "methods": {
+        "verified_default": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 3.9360489543065764,
+              "p95": 14.254243548658353,
+              "max": 54.26456206493692
+            },
+            "forward_mm": {
+              "mean": 4.3086745287982815,
+              "p95": 15.057469052378364,
+              "max": 32.85352150493095
+            },
+            "reverse_mm": {
+              "mean": 3.6837909523185735,
+              "p95": 13.513757145325288,
+              "max": 54.26456206493692
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.1772830702080266,
+                "p95": 6.902456746813849,
+                "max": 54.26456206493692
+              },
+              "worst": {
+                "distance_mm": 54.26456206493692,
+                "frame_offset": 0,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 4.979086285522317,
+                "p95": 16.597882946974046,
+                "max": 32.85352150493095
+              },
+              "worst": {
+                "distance_mm": 32.85352150493095,
+                "frame_offset": 0,
+                "vertex": 4247,
+                "owner": "Lelbow",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 7.159076690673828,
+            "p95": 23.548693656921387,
+            "max": 41.76472091674805
+          }
+        },
+        "official_default_projected": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 4.108350309450236,
+              "p95": 15.226911369217323,
+              "max": 53.80813687069071
+            },
+            "forward_mm": {
+              "mean": 4.475910533865703,
+              "p95": 16.60109091546618,
+              "max": 49.83749327111224
+            },
+            "reverse_mm": {
+              "mean": 3.8595214201616077,
+              "p95": 14.043159770821573,
+              "max": 53.80813687069071
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.131915008108329,
+                "p95": 6.865644340479086,
+                "max": 53.80813687069071
+              },
+              "worst": {
+                "distance_mm": 53.80813687069071,
+                "frame_offset": 0,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 5.280476640004375,
+                "p95": 17.426489666751305,
+                "max": 49.83749327111224
+              },
+              "worst": {
+                "distance_mm": 49.83749327111224,
+                "frame_offset": 0,
+                "vertex": 4244,
+                "owner": "Lelbow",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 9.764213562011719,
+            "p95": 28.185270309448235,
+            "max": 47.15297317504883
+          }
+        },
+        "official_map_exact_smplx": {
+          "all_body_including_head": {
+            "symmetric_mm": {
+              "mean": 4.120344937237713,
+              "p95": 15.118724800686207,
+              "max": 54.34820882035681
+            },
+            "forward_mm": {
+              "mean": 4.484536949726594,
+              "p95": 15.89696690127094,
+              "max": 48.857363793737214
+            },
+            "reverse_mm": {
+              "mean": 3.8737962414436717,
+              "p95": 14.314020875751721,
+              "max": 54.34820882035681
+            }
+          },
+          "regions": {
+            "head": {
+              "symmetric_mm": {
+                "mean": 2.234356389920025,
+                "p95": 7.003153196257336,
+                "max": 54.34820882035681
+              },
+              "worst": {
+                "distance_mm": 54.34820882035681,
+                "frame_offset": 0,
+                "vertex": 4532,
+                "owner": "head",
+                "direction": "soma_to_smplx"
+              }
+            },
+            "torso_limbs_and_neck": {
+              "symmetric_mm": {
+                "mean": 5.238831757389987,
+                "p95": 17.349131220609568,
+                "max": 48.857363793737214
+              },
+              "worst": {
+                "distance_mm": 48.857363793737214,
+                "frame_offset": 0,
+                "vertex": 4244,
+                "owner": "Lelbow",
+                "direction": "smplx_to_soma"
+              }
+            }
+          },
+          "original_attachment_error_mm": {
+            "mean": 9.429441452026367,
+            "p95": 28.97904682159423,
+            "max": 47.0649299621582
+          }
+        }
+      }
+    }
+  ],
+  "head_rest_diagnostic": {
+    "summary": {
+      "mean": 2.613102183465489,
+      "p95": 7.975929670156809,
+      "max": 54.77152785668963
+    },
+    "maximum": {
+      "vertex": 4532,
+      "owner": "head",
+      "source_xyz_m": [
+        -0.0018067837227135897,
+        0.6035811901092529,
+        0.06618635356426239
+      ],
+      "nearest_smplx_xyz_m": [
+        0.022163630921957594,
+        0.5830520987051728,
+        0.11095124931575036
+      ],
+      "distance_mm": 54.77152785668963,
+      "connected_component_vertices": 18056
+    },
+    "note": "Dominant skinning owner is head. Internal versus exterior surface semantics remain unconfirmed; original score is retained."
+  }
+}

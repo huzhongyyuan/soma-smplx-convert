@@ -1,102 +1,107 @@
-# soma-smplx-convert
+# SOMA30 ↔ SMPL-X body conversion
 
-Convert human motion between the **SOMA30** skeleton/skin (used by [ARDY](https://github.com/nv-tlabs/ardy) and [SOMA-X](https://github.com/NVlabs/SOMA-X)) and **SMPL-X**, in both directions, by fitting mesh surfaces rather than copying joint angles.
+CPU conversion of **body motion** between ARDY's SOMA30 skin and standard SMPL-X. It uses fixed-shape surface fitting, analytic mesh Jacobians and per-frame Levenberg–Marquardt optimization. Coordinates are in metres, Y-up. Frame count and timestamps are retained without resampling or smoothing; world motion is fitted without rigid alignment or root locking.
 
-SOMA and SMPL-X put their joints at different anatomical points (hip width differs by ~8 cm, spine heights differ), so copying bone rotations leaves centimetre-level offsets at the hands and shoulders. This repo fits the SMPL-X **surface** to the SOMA surface once at rest, then solves each frame's pose so that the two meshes stay attached.
+This body research release packages the current verified converter. It is **not lossless**: short TRAIN diagnostics have about 4–6 mm mean torso/limb surface distance, with local maxima up to 51 mm. No tested method was best on every metric. The default retains the verified attachment-based forward fit and its matched projected-stationarity inverse; NVIDIA mapping comparisons are reported separately.
 
-## Cases
-
-Each GIF has four panels: **input** · **converted** · **converted back (round trip)** · **round-trip vertex error heat map** (0–20 mm), plus the per-frame error curve. 120 frames at 30 fps.
-
-**SOMA → SMPL-X → SOMA, dance (FineDance clip 003, frames 200–319)**
-
-![FineDance case](assets/case_finedance.gif)
-
-Round-trip vertex error 3.9 mm mean / 8.1 mm p95; surface distance SOMA→SMPL-X 4.7 mm mean.
-
-**SOMA → SMPL-X → SOMA, everyday motion (HumanML3D 000548, frames 0–119)**
-
-![HumanML3D case](assets/case_humanml3d.gif)
-
-Round-trip vertex error 4.6 mm mean / 11.7 mm p95; surface distance SOMA→SMPL-X 5.4 mm mean.
-
-**SMPL-X → SOMA → SMPL-X, co-speech gesture (BEAT2 10_kieks_0_103_103, frames 300–419)**
-
-![BEAT2 case](assets/case_beat2.gif)
-
-Round-trip vertex error 5.8 mm mean / 16.2 mm p95; body pose error 4.7°, but **finger pose error 34°** (see Limitations).
-
-The FineDance and HumanML3D inputs are SOMA30 retargets of those datasets; the BEAT2 input is the original SMPL-X data. No dataset files are included in this repo.
-
-## Results
-
-Single CPU process, 120 frames per clip, fitted rest shape (`rest_fit.npz`). Distances in mm.
-
-| Clip | Direction | Surface dist. mean / p95 | Round-trip vertex mean / p95 / max | Round-trip root mean | Round-trip rotation | Accel. input → converted → round trip (mm/frame²) |
-|---|---|---|---|---|---|---|
-| FineDance 003 | SOMA→SMPL-X→SOMA | 4.67 / 13.2 | 3.93 / 8.05 / 20.8 | 6.7 | 2.4° (local, mean) | 2.60 → 2.12 → 3.03 |
-| HumanML3D 000548 | SOMA→SMPL-X→SOMA | 5.44 / 16.4 | 4.63 / 11.7 / 30.6 | 4.4 | 3.0° (local, mean) | 8.21 → 6.10 → 8.43 |
-| BEAT2 10_kieks_0_103_103 | SMPL-X→SOMA→SMPL-X | 4.64 / 15.2 | 5.79 / 16.2 / 63.4 | 7.6 | body 4.7°, hands 34.1° | 0.80 → 1.66 → 1.36 |
-
-Surface distance is measured between two *different* body shapes, so it is never zero. Speed on our CPU run: SOMA→SMPL-X ≈ 0.15 s/frame, SMPL-X→SOMA ≈ 1.0 s/frame (it varied 0.5–4 s/frame across runs depending on machine load).
-
-## Limitations
-
-- **Fingers**: SOMA and SMPL-X hands differ a lot; finger rotations after a round trip are off by ~34° on average, even though hand surface positions are close.
-- **SMPL-X → SOMA adds jitter**: on BEAT2 the per-vertex acceleration doubles (0.80 → 1.66 mm/frame²). Per-frame fitting has no temporal term yet.
-- **Speed**: L-BFGS per frame, roughly 0.15–4 s/frame on CPU; not real time.
-- **Fixed body shape**: SMPL-X output always uses the shape fitted to the SOMA rest mesh. For SMPL-X input the file's `betas` are ignored, so subjects with a very different body will fit worse.
-- **Joint-position-only input** (no rotations) is not supported or tested.
-- Evaluated on three clips only; this is not a large-scale benchmark.
+**Scope:** SMPL-X body joints 0–21, including wrists and toes. Fingers, jaw and eyes are not optimized. SMPL-X fingers default to neutral; optional supplied finger rotations can be copied unchanged as a sidecar. This is passthrough, not hand retargeting or hand-quality validation. SOMA's native hand template is retained.
 
 ## Install
 
 ```bash
-pip install torch            # pick the build for your platform
-pip install -r requirements.txt   # includes ARDY for the SOMA30 skeleton and skin
+git clone --branch v0.2.0-body.1 https://github.com/huzhongyyuan/soma-smplx-convert.git
+cd soma-smplx-convert
+python -m pip install torch
+python -m pip install -r requirements-body.txt
 ```
 
-Download `SMPLX_NEUTRAL_2020.npz` from the [SMPL-X website](https://smpl-x.is.tue.mpg.de/) (registration required, its own license). It is not distributed here.
+Obtain `SMPLX_NEUTRAL_2020.npz` separately from [SMPL-X](https://smpl-x.is.tue.mpg.de/) under its license. ARDY supplies its own SOMA assets. Model weights, fitted rest meshes and source dataset motions are not included. A new rest fit changes the calibration; published scores apply to the frozen rest hash in `docs/body_validation.json`.
 
-## Usage
+## Convert
 
-All files are numpy `.npz`, y-up, metres, 30 fps.
-
-| Format | Keys |
-|---|---|
-| SOMA30 | `local_rot_mats` [T,30,3,3], `root_positions` [T,3] |
-| SMPL-X | `poses` [T,165] axis-angle (55 joints), `trans` [T,3]; output also stores `betas` [30] = 20 shape + 10 expression |
+Create the fixed rest calibration once:
 
 ```bash
-# 1. once: fit SMPL-X shape to the SOMA rest mesh and build surface attachments
-python scripts/fit_rest.py --smplx-model SMPLX_NEUTRAL_2020.npz --out rest_fit.npz
-
-# 2. convert
-python scripts/convert.py soma2smplx soma_clip.npz smplx_clip.npz --smplx-model SMPLX_NEUTRAL_2020.npz --rest rest_fit.npz
-python scripts/convert.py smplx2soma smplx_clip.npz soma_clip.npz --smplx-model SMPLX_NEUTRAL_2020.npz --rest rest_fit.npz
-
-# 3. round-trip evaluation with the 4-panel video / GIF
-python scripts/evaluate.py --soma soma_clip.npz --start 0 --frames 120 --name my_clip --out results \
-    --smplx-model SMPLX_NEUTRAL_2020.npz --rest rest_fit.npz --render --gif
+CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  python scripts/fit_rest.py --smplx-model /path/SMPLX_NEUTRAL_2020.npz --out rest_fit.npz
 ```
 
-In Python:
+Use the **body** file interface in both directions:
+
+```bash
+CUDA_VISIBLE_DEVICES='' python scripts/convert_body.py soma2smplx input_soma.npz output_smplx.npz \
+  --smplx-model /path/SMPLX_NEUTRAL_2020.npz --rest rest_fit.npz --threads 1
+
+CUDA_VISIBLE_DEVICES='' python scripts/convert_body.py smplx2soma output_smplx.npz returned_soma.npz \
+  --smplx-model /path/SMPLX_NEUTRAL_2020.npz --rest rest_fit.npz --threads 1
+```
+
+| Format | Fields |
+|---|---|
+| SOMA | `local_rot_mats[T,30,3,3]`: proper rotation matrices; `root_positions[T,3]` |
+| SMPL-X | `poses[T,165]`: axis-angle radians; `trans[T,3]`; `betas`: fixed shape coefficients |
+| Optional timing | `fps` scalar; `timestamps` or `frame_times` with T entries, copied unchanged |
+| Output SMPL-X shape | `betas[20]` and `expression[10]`, stored separately |
+
+No frame-rate conversion is performed. Absent `fps`, `--fps` declares the input rate (default 30). Inputs must have valid rotations and at least one frame. The frozen SOMA body contract requires neutral Neck2; unsupported Neck2 motion is rejected. Other unused SOMA30 slots follow the fixed neutral convention.
+
+SMPL-X file input must declare shape metadata matching the rest fit. To deliberately change subject shape, pass `--canonicalize-shape`: it preserves the world pelvis **before fitting**, then retargets with the fixed output shape. It does not preserve the original subject surface or lock the root during fitting. Split historical 30-element combined shape/expression arrays into `betas[20]` and `expression[10]` first.
+
+Python API (assumes the frozen rest shape; use the file API to check shape metadata):
 
 ```python
-from soma_smplx.meshfit import MeshConverter
-C = MeshConverter("SMPLX_NEUTRAL_2020.npz", "rest_fit.npz")
-pose55, transl = C.soma_to_smplx(local_rot_mats, root_positions)   # [T,55,3] axis-angle, [T,3]
-local30, root = C.smplx_to_soma(pose55, transl)
+from soma_smplx.body import BodyConverter
+
+converter = BodyConverter('/path/SMPLX_NEUTRAL_2020.npz', 'rest_fit.npz')
+poses, trans = converter.soma_to_smplx(local_rot_mats, root_positions)
+local, root = converter.smplx_to_soma(poses, trans)
 ```
 
-`soma_smplx.analytic.Converter` is a faster bone-direction converter (no mesh fitting); the mesh-fit converter uses it as initialisation.
+Optional `hands[T,30,3]` supplied to `soma_to_smplx` are copied to SMPL-X finger slots, outside the optimized body objective.
 
-## Method
+## Measured quality
 
-1. **Rest fit** (`fit_rest`): fit SMPL-X betas, expression and pose to the SOMA rest mesh with point-to-plane ICP. Then attach every SMPL-X vertex to its closest point on the SOMA rest surface (triangle, barycentric coordinates, normal offset), and every SOMA vertex to the SMPL-X rest surface.
-2. **SOMA → SMPL-X**: carry the attachments onto the posed SOMA mesh and solve SMPL-X global orientation, body pose, hand pose and translation (shape fixed) with L-BFGS, initialised by the analytic converter.
-3. **SMPL-X → SOMA**: the same with the reverse attachments, solving SOMA30 local rotations and root position.
+**Bidirectional closest-surface distance**, in mm, using body query vertices against the opposite **complete** mesh. This table separates head-dominant vertices; neck remains included. No rigid alignment, difficult-frame removal or postprocessing. Four TRAIN clips × 16 consecutive frames plus one difficult AIST++ frame: **65 frames**, not a full benchmark.
 
-## License and acknowledgements
+| Dataset / source frames | Default mean / p95 / max | Official mapping + exact refinement mean / p95 / max |
+|---|---:|---:|
+| FineDance 001, 392–407 | 4.57 / 12.59 / 33.90 | 4.56 / 12.56 / 32.07 |
+| AIST++, 60–75 | 3.91 / 11.87 / 35.10 | 4.05 / 11.99 / 30.69 |
+| HumanML3D 000002, 60–75 | 5.80 / 19.78 / 50.59 | 5.25 / 18.70 / 43.86 |
+| BEAT2, 60–75 | 4.33 / 13.41 / 29.43 | 4.16 / 13.05 / 26.41 |
+| AIST++ difficult frame 275 | 4.98 / 16.60 / 32.85 | 5.24 / 17.35 / 48.86 |
 
-Code: Apache-2.0. It depends on [ARDY](https://github.com/nv-tlabs/ardy) (Apache-2.0) for the SOMA30 skeleton and skin, and follows the SOMA body model from [SOMA-X](https://github.com/NVlabs/SOMA-X) (Apache-2.0). SMPL-X model files are under their own license and must be obtained separately. Example clips come from FineDance, HumanML3D and BEAT2; please follow their licenses when using those datasets.
+[body_benchmark.json](docs/body_benchmark.json) records source IDs, hashes, original all-body and head-separated scores. `verified_default` is the converter shipped here; `official_map_exact_smplx` is an experimental comparator, not a runtime mode. This default is the frozen body converter, not the historical v0.1 L-BFGS implementation.
+
+The official hybrid improves some surface scores but worsens the difficult elbow frame, original attachment errors and temporal-error diagnostics. We retain the default for verified behavior and its matched inverse, **not as a claim of globally optimal accuracy**. Closest-surface distance can miss anatomical sliding; small round-trip error alone cannot establish accurate intermediate SMPL-X geometry.
+
+### Residual locations
+
+![Head, collar and elbow residuals](assets/body_error_locations.jpg)
+
+The image shows the **official-mapping comparator**, not the default. Left: input SOMA. Middle: converted SMPL-X. Right: actual mesh sections through the measured endpoints (green SOMA, purple SMPL-X). Read the default/comparator scores together.
+
+The 55.76 mm head maximum is at SOMA vertex 4532; that point is already 54.77 mm from the target surface in the rest fit. Its section suggests an internal head surface, but exact anatomical semantics remain unconfirmed. Independent body residuals remain at the collar and elbow. This CPU geometry diagnostic is not a PyTorch3D rendering acceptance test.
+
+## Verify your installation
+
+```bash
+CUDA_VISIBLE_DEVICES='' python -m unittest discover -s tests -v
+CUDA_VISIBLE_DEVICES='' python scripts/validate_body.py \
+  --smplx-model /path/SMPLX_NEUTRAL_2020.npz --rest rest_fit.npz \
+  --input /path/soma_clip.npz --out body_check.json
+```
+
+Tests compare attachment derivatives with finite differences, rotation exponentials with SciPy, and batched LM fits with known answers. The asset check uses the first input frame, compares collapsed-body skinning with full SMPL-X, runs both CLI directions and checks timing and default non-body pose. Omit `--input` for a neutral synthetic pose. These are technical checks, **not full-dataset quality acceptance**. See the [validation receipt](docs/body_validation.json) and [release notes](docs/BODY_RELEASE.md).
+
+## Method and limitations
+
+The forward objective fits attached surface points and selected global spine rotations with analytic pose, skinning and surface-normal derivatives. Non-body SMPL-X transforms are neutral; all vertices and applicable pose correctives are retained. The inverse initializes from reverse surface fitting, then solves projected stationarity equations of the same forward objective. Only the SMPL-X input is provided to the inverse; there is no original-SOMA pose sidecar.
+
+The inverse is local, not globally unique. Fixed shapes and differing articulation can retain centimetre-scale errors. Per-frame fitting has no temporal regularizer. Long-sequence continuity, full-dataset quality, real-time operation and four-dataset official metric parity remain unestablished. No near-zero conversion claim is made.
+
+The historical full-body implementation remains at `soma_smplx.meshfit.MeshConverter` and `scripts/convert.py` for explicit reproduction. Its different finger/shape policy and scores are in [LEGACY_V0_1.md](docs/LEGACY_V0_1.md). The recommended commands above use the new body interface throughout.
+
+## License and references
+
+Code: Apache-2.0. [ARDY](https://github.com/nv-tlabs/ardy) and [NVIDIA SOMA-X](https://github.com/NVlabs/SOMA-X) supply the SOMA representation. The comparator used SOMA-X commit `366ed27cf88d88d9702c4f9f30cea046c0cc391c`; that implementation is not bundled here. This is an independent converter, not an NVIDIA release. SMPL-X and source datasets retain their own licenses.

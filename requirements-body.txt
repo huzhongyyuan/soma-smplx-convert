@@ -1,0 +1,6 @@
+# Frozen CPU validation dependencies; choose an appropriate PyTorch build.
+numpy==1.26.4
+scipy==1.15.3
+torch>=2.4
+trimesh==5.0.0
+ardy @ git+https://github.com/nv-tlabs/ardy.git@693f74d13b3d04a0a22ce127ee79c929dd89756b

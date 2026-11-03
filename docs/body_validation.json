@@ -1,0 +1,49 @@
+{
+  "scope": "One-frame technical smoke; no quality acceptance inferred.",
+  "input_sha256": "f60ca9bec62f9d6bef271d5c327a6bd46314aef2654565c2288f0bfdf4585ea0",
+  "rest_sha256": "9c5e169fa72772cec8cea0f96da389df62690e63ed9bdf7a286303111f28725f",
+  "smplx_model_sha256": "bdf06146e27d92022fe5dadad3b9203373f6879eca8e4d8235359ee3ec6a5a74",
+  "full_smplx_equivalence_max_coordinate_m": 2.980232238769531e-07,
+  "cli_roundtrip": "passed",
+  "neutral_nonbody": "passed",
+  "timestamps_and_fps": "passed",
+  "soma_body_roundtrip_mm": {
+    "mean": 0.00030676813912577927,
+    "p95": 0.0007413480110699315,
+    "max": 0.0016784985782578588
+  },
+  "root_roundtrip_mm": {
+    "mean": 0.0001228781184181571,
+    "p95": 0.0001228781184181571,
+    "max": 0.0001228781184181571
+  },
+  "sample": {
+    "dataset": "HumanML3D",
+    "source_id": "000002",
+    "source_frame": 60,
+    "frames": 1,
+    "split": "TRAIN"
+  },
+  "tests": "4 numerical unit tests passed; actual CLI round trip passed",
+  "execution": {
+    "cuda": false,
+    "math_threads": 1,
+    "temporary_directory_removed_on_exit": true
+  },
+  "source_files_sha256": {
+    "soma_smplx/body.py": "85cf417aedcc5f45d6bec51ca725affc9c6e41196419665aaef5b038a6f1c920",
+    "soma_smplx/render.py": "01749ac6686090f8583a5bcce7cc2415f61d33b9a617b2574bc1b8a3c9f7b278",
+    "soma_smplx/meshfit.py": "4f8fc329fb625333d2bfc956f43e6d23161f141f1e374b0331ed15fefce090a9",
+    "soma_smplx/_lmfit.py": "1ed90dcf55faf7855620d4b6dadc87caca9ddcfed978ff9f3ad7bb6d07f1b589",
+    "soma_smplx/__init__.py": "9b426c3130ff1446f825252e1abca4818beb1870a0b61ce4ca2c88c1ae17ace6",
+    "soma_smplx/analytic.py": "81cc7ca4eff86b0049cde31b17872e4afd69575a86b3ea7a6ea3af0aeef3185d",
+    "soma_smplx/_fastskin.py": "9ee894916978fa9b6e8516988b0f716cf472c46c0fc1c7e9f528a5863e0ce6f1",
+    "scripts/validate_body.py": "a23e24ee5925dde8093f90090107688cc110bae42e61a7430c3d0a644d049d52",
+    "scripts/convert.py": "521c64187fe9c714391d4a786af1399e7c6d502e157c4aa43827c31747f4f007",
+    "scripts/convert_body.py": "3ac0ab8a99615cde8dc3af14cf1b65bf3ea426ed6a2784402f03f8aacad6d29a",
+    "scripts/evaluate.py": "29620455f202ad954f3d6e87a8fe53256118d7aaef09a5fd00557b7f4b3ef203",
+    "scripts/fit_rest.py": "e727535c773d39c05d62379d5df4fd3cefcf875e8a4eb691c9e9f5ebcce13b47",
+    "tests/test_body_numerics.py": "80beedf1b77d623073bb57cfbe9563064f26335f1ddfbfe4c8681429944f4cad"
+  },
+  "numerical_definitions_identical_to_verified_snapshot": true
+}
