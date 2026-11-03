@@ -6,6 +6,12 @@ This body research release packages the current verified converter. It is **not 
 
 **Scope:** SMPL-X body joints 0–21, including wrists and toes. Fingers, jaw and eyes are not optimized. SMPL-X fingers default to neutral; optional supplied finger rotations can be copied unchanged as a sidecar. This is passthrough, not hand retargeting or hand-quality validation. SOMA's native hand template is retained.
 
+## Visual comparison
+
+![Four datasets: input SOMA, verified default, official comparator](assets/body_comparison.jpg)
+
+Left: input SOMA. Middle: **verified default shipped in this release**. Right: official mapping plus exact SMPL-X refinement, retained as a comparator. Rows show FineDance, AIST++, HumanML3D and BEAT2 at the default's largest attachment-error frame in each 16-frame clip. All panels use the same world coordinates, time and camera. Body mesh and skeleton are shown together; fingers are fixed and not evaluated. These are saved-mesh CPU diagnostic images. Local failures are shown separately below.
+
 ## Install
 
 ```bash
