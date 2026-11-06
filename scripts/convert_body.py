@@ -28,6 +28,10 @@ def main():
     source, destination = Path(args.input), Path(args.output)
     if destination.exists(): raise FileExistsError(destination)
     z = np.load(source, allow_pickle=False)
+    if args.direction == 'soma2smplx' and 'conversion_version' in z.files:
+        from soma_smplx.native_transport import PRODUCERS
+        if str(z['conversion_version']) in PRODUCERS:
+            raise ValueError('Native rotation-transport input requires scripts/convert_native.py; surface fitting is a different inverse')
     fps = float(z['fps']) if 'fps' in z.files else args.fps
     if not np.isfinite(fps) or fps <= 0: raise ValueError('Invalid frame rate')
     c = BodyConverter(args.smplx_model, args.rest)

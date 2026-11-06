@@ -1,5 +1,34 @@
 # SOMA30 ↔ SMPL-X body conversion
 
+## Choose the inverse that matches your producer
+
+SOMA30 files can come from different forward conversions. A rotation-preserving
+transport needs its matched rotation inverse. Running surface fitting on those
+files changes poses and benchmark scores. The surface-fitting release below
+remains available for inputs produced by that fit.
+
+For declared native/global rotation transport, use:
+
+```bash
+python scripts/convert_native.py input_soma.npz output_smplx.npz \
+  --producer smplx_official_full_to_ardy_somaskel30_30fps_global_transport_v1 \
+  --root-scale 1
+```
+
+FineDance's `soma_v4_fd_delivery` producer records `root_scale` in its archive;
+omit the flag to use that recorded scale. `soma_native55_transport` and
+`hml_global_slerp_transport` are explicit producer contracts, not shape detection.
+This path requires only NumPy/SciPy, keeps every frame, retains the producer's
+fixed world offset and composes Neck2 into Head. It uses raw decoded rotations
+when available. It never reads official GT, smooths or aligns frames. Optional
+`--hands-from` copies aligned SMPL-X finger rotations and betas; reconstructed
+HandRep is decoded with its column and joint-order conventions. Jaw/eyes are
+neutral. Without a hand sidecar, output shape is explicitly zero: this is
+orientation transport, not preservation of the SOMA surface or proportions.
+
+The two methods have separate validation scopes. Use `python -m unittest
+discover -s tests -p 'test_native_transport.py' -v` for the native path.
+
 CPU conversion of **body motion** between ARDY's SOMA30 skin and standard SMPL-X. It uses fixed-shape surface fitting, analytic mesh Jacobians and per-frame Levenberg–Marquardt optimization. Coordinates are in metres, Y-up. Frame count and timestamps are retained without resampling or smoothing; world motion is fitted without rigid alignment or root locking.
 
 This body research release packages the current verified converter. It is **not lossless**: short TRAIN diagnostics have about 4–6 mm mean torso/limb surface distance, with local maxima up to 51 mm. No tested method was best on every metric. The default retains the verified attachment-based forward fit and its matched projected-stationarity inverse; NVIDIA mapping comparisons are reported separately.
