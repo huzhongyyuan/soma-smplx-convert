@@ -43,8 +43,12 @@ Left: input SOMA. Middle: **verified default shipped in this release**. Right: o
 
 ## Install
 
+The current `main` branch includes the matched native-transport inverse above.
+The frozen `v0.2.0-body.1` tag contains the earlier surface-fitting release and
+does not include `scripts/convert_native.py`.
+
 ```bash
-git clone --branch v0.2.0-body.1 https://github.com/huzhongyyuan/soma-smplx-convert.git
+git clone --branch main --single-branch https://github.com/huzhongyyuan/soma-smplx-convert.git
 cd soma-smplx-convert
 python -m pip install torch
 python -m pip install -r requirements-body.txt
